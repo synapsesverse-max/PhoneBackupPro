@@ -25,9 +25,11 @@ object AppModule {
     @Singleton
     fun provideBackupEngine(
         @ApplicationContext context: Context,
+        encryptionService: com.phonebackup.core.encryption.EncryptionService,
+        compressionService: com.phonebackup.core.compression.CompressionService,
         backupRepository: com.phonebackup.core.data.repository.BackupRepository
     ): BackupEngine {
-        return BackupEngine(context, backupRepository)
+        return BackupEngine(context, encryptionService, compressionService, backupRepository)
     }
     
     @Provides
@@ -50,9 +52,10 @@ object AppModule {
     @Provides
     @Singleton
     fun provideWhatsAppBackupManager(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
+        encryptionService: com.phonebackup.core.encryption.EncryptionService
     ): WhatsAppBackupManager {
-        return WhatsAppBackupManager(context)
+        return WhatsAppBackupManager(context, encryptionService)
     }
     
     @Provides

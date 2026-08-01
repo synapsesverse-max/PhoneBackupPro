@@ -3,6 +3,10 @@ package com.phonebackup.core.di
 import android.content.Context
 import androidx.room.Room
 import com.phonebackup.core.data.local.BackupDatabase
+import com.phonebackup.core.data.local.dao.BackupDao
+import com.phonebackup.core.data.local.dao.ContactDao
+import com.phonebackup.core.data.local.dao.MediaDao
+import com.phonebackup.core.data.local.dao.MessageDao
 import com.phonebackup.core.encryption.EncryptionService
 import com.phonebackup.core.encryption.EncryptionManager
 import com.phonebackup.core.compression.CompressionService
@@ -64,5 +68,29 @@ object CoreModule {
             BackupDatabase::class.java,
             BackupDatabase.DATABASE_NAME
         ).build()
+    }
+    
+    @Provides
+    @Singleton
+    fun provideBackupDao(database: BackupDatabase): BackupDao {
+        return database.backupDao()
+    }
+    
+    @Provides
+    @Singleton
+    fun provideContactDao(database: BackupDatabase): ContactDao {
+        return database.contactDao()
+    }
+    
+    @Provides
+    @Singleton
+    fun provideMessageDao(database: BackupDatabase): MessageDao {
+        return database.messageDao()
+    }
+    
+    @Provides
+    @Singleton
+    fun provideMediaDao(database: BackupDatabase): MediaDao {
+        return database.mediaDao()
     }
 }
