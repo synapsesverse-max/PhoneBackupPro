@@ -129,7 +129,7 @@ class WhatsAppBackupManager @Inject constructor(
         val localDir = File(Environment.getExternalStorageDirectory(), "WhatsApp/Databases")
         if (localDir.exists()) {
             localDir.listFiles()?.forEach { file ->
-                if (file.name.matches(Regex("msgstore-\d{4}-\d{2}-\d{2}.*"))) {
+                if (file.name.matches(Regex("msgstore-\\d{4}-\\d{2}-\\d{2}.*"))) {
                     backups.add(
                         WhatsAppBackupInfo(
                             name = file.name,

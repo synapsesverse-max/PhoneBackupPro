@@ -11,6 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.phonebackup.whatsapp.WhatsAppRecoveryViewModel
+import com.phonebackup.whatsapp.WhatsAppRecoveryUIState
 import com.phonebackup.whatsapp.RecoveryProgress
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -140,11 +141,4 @@ fun WhatsAppScreen(
             else -> {}
         }
     }
-}
-
-sealed class WhatsAppRecoveryUIState {
-    object Idle : WhatsAppRecoveryUIState()
-    data class InProgress(val phase: String, val progress: Int) : WhatsAppRecoveryUIState()
-    data class Completed(val messagesCount: Int, val mediaCount: Int) : WhatsAppRecoveryUIState()
-    data class Error(val message: String) : WhatsAppRecoveryUIState()
 }

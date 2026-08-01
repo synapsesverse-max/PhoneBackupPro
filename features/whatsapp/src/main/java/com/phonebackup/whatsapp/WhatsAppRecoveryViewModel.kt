@@ -2,7 +2,6 @@ package com.phonebackup.whatsapp
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.phonebackup.pro.ui.screens.WhatsAppRecoveryUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
