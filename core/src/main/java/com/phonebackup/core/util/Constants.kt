@@ -28,7 +28,7 @@ object Constants {
     const val WHATSAPP_PACKAGE = "com.whatsapp"
     const val WHATSAPP_BUSINESS_PACKAGE = "com.whatsapp.w4b"
     const val WHATSAPP_DB_PATTERN = "msgstore*.db*"
-    const val WHATSAPP_CRYPT_VERSIONS = listOf("crypt12", "crypt14", "crypt15")
+    val WHATSAPP_CRYPT_VERSIONS = listOf("crypt12", "crypt14", "crypt15")
     
     // Third-party tools
     const val DRFONE_PACKAGE = "com.wondershare.drfone"

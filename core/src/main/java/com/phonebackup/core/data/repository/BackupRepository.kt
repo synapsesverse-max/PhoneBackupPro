@@ -43,6 +43,10 @@ class BackupRepository @Inject constructor(
     suspend fun getCompletedBackupCount(): Int {
         return backupDao.getCompletedBackupCount()
     }
+
+    suspend fun getBackupsByStatus(status: BackupStatus): List<BackupRecord> {
+        return backupDao.getBackupsByStatus(status)
+    }
     
     suspend fun getTotalBackupSize(): Long {
         return backupDao.getTotalBackupSize()

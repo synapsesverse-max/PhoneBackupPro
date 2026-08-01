@@ -42,8 +42,3 @@ class RestoreRepository @Inject constructor(
         backupRepository.updateBackupStatus(uuid, BackupStatus.RESTORED)
     }
 }
-
-private fun <T> BackupDao.getBackupsByStatus(status: BackupStatus): List<BackupRecord> {
-    // This is a helper; the actual implementation would use the DAO
-    return emptyList()
-}

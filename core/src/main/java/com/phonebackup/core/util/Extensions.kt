@@ -15,7 +15,7 @@ fun File.ensureDir(): File {
 
 fun File.humanReadableSize(): String {
     return when {
-        length() < 1024 -> "$length() B"
+        length() < 1024 -> "${length()} B"
         length() < 1024 * 1024 -> "${length() / 1024} KB"
         length() < 1024 * 1024 * 1024 -> "${length() / (1024 * 1024)} MB"
         else -> "%.2f GB".format(length().toDouble() / (1024 * 1024 * 1024))
