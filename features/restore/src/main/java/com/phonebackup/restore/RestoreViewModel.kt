@@ -30,8 +30,9 @@ class RestoreViewModel @Inject constructor(
     private fun loadAvailableBackups() {
         viewModelScope.launch {
             backupRepository.getAllBackups().collect { backups ->
-                _availableBackups.value = backups.filter { 
-                    it.status == com.phonebackup.core.data.local.model.BackupStatus.COMPLETED 
+                _availableBackups.value = backups.filter {
+                    it.status == com.phonebackup.core.data.local.model.BackupStatus.COMPLETED ||
+                        it.status == com.phonebackup.core.data.local.model.BackupStatus.VERIFIED
                 }
             }
         }

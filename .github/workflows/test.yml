@@ -22,11 +22,21 @@ jobs:
         distribution: 'temurin'
         cache: gradle
     
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        packages: >-
+          platforms;android-34
+          build-tools;34.0.0
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
     - name: Run Unit Tests
-      run: ./gradlew test
+      run: ./gradlew test --no-daemon
     
     - name: Generate Coverage Report
-      run: ./gradlew testDebugUnitTestCoverage
+      run: ./gradlew testDebugUnitTestCoverage --no-daemon
     
     - name: Upload Coverage
       uses: codecov/codecov-action@v3
@@ -65,4 +75,6 @@ jobs:
       with:
         api-level: ${{ matrix.api-level }}
         arch: x86_64
-        script: ./gradlew connectedCheck
+        target: default
+        force-avd-creation: true
+        script: chmod +x gradlew && ./gradlew connectedCheck --no-daemon

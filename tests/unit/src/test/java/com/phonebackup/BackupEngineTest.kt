@@ -30,20 +30,17 @@ class BackupEngineTest {
     }
     
     @Test
-    fun `test full backup execution starts correctly`() = runTest {
-        // Given
-        val backupRecord = BackupRecord(
-            backupType = BackupType.FULL_PHONE,
-            deviceInfo = "Test Device",
-            osVersion = "34"
+    fun `completed backup exposes verified artifact metadata`() {
+        val artifact = java.io.File.createTempFile("phonebackup", ".pbp")
+        artifact.writeText("verified backup")
+        val completed = BackupProgress.Completed(
+            backupDir = artifact.parentFile,
+            artifact = artifact,
+            checksum = "abc123"
         )
-        val options = BackupOptions()
-        
-        // When
-        val progressList = mutableListOf<BackupProgress>()
-        
-        // Then
-        assertTrue(true) // Placeholder assertion
+        assertTrue(completed.artifact.exists())
+        assertTrue(completed.checksum.isNotBlank())
+        artifact.delete()
     }
     
     @Test
