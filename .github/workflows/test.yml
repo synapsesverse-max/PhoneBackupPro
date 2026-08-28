@@ -71,4 +71,4 @@ jobs:
         force-avd-creation: true
         emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect
         disable-animations: true
-        script: chmod +x gradlew && ./gradlew connectedCheck --no-daemon
+        script: chmod +x gradlew && ./gradlew :app:connectedDebugAndroidTest --no-daemon
