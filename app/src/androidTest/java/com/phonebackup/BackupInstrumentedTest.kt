@@ -26,13 +26,13 @@ class BackupInstrumentedTest {
     }
 
     @Test
-    fun `test app context is valid`() {
+    fun testAppContextIsValid() {
         assertNotNull(context)
         assertTrue(context.packageName.contains("phonebackup"))
     }
 
     @Test
-    fun `test encryption service works on device`() {
+    fun testEncryptionServiceWorksOnDevice() {
         val data = "Test data for instrumented test".toByteArray()
         val password = "device_test_password"
 
@@ -44,13 +44,13 @@ class BackupInstrumentedTest {
     }
 
     @Test
-    fun `test backup directory is accessible`() {
+    fun testBackupDirectoryIsAccessible() {
         val backupDir = requireNotNull(context.getExternalFilesDir(null))
         assertTrue(backupDir.exists() || backupDir.mkdirs())
     }
 
     @Test
-    fun `test file creation in backup directory`() {
+    fun testFileCreationInBackupDirectory() {
         val backupDir = requireNotNull(context.getExternalFilesDir(null))
         val testFile = java.io.File(backupDir, "test_backup.txt")
 
