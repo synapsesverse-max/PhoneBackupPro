@@ -35,15 +35,6 @@ jobs:
     - name: Run Unit Tests
       run: ./gradlew test --no-daemon
     
-    - name: Generate Coverage Report
-      run: ./gradlew testDebugUnitTestCoverage --no-daemon
-    
-    - name: Upload Coverage
-      uses: codecov/codecov-action@v3
-      with:
-        files: ./app/build/reports/jacoco/testDebugUnitTestCoverage/testDebugUnitTestCoverage.xml
-        flags: unittests
-    
     - name: Upload Test Results
       if: always()
       uses: actions/upload-artifact@v4
