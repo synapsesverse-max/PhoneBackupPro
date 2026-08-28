@@ -101,7 +101,14 @@ class EncryptionService @Inject constructor() {
         require(password.isNotEmpty()) { "Password must not be empty" }
         val spec = PBEKeySpec(password.toCharArray(), salt, ITERATION_COUNT, KEY_LENGTH)
         return try {
-            SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256").generateSecret(spec).encoded
+            val factory = try {
+                SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
+            } catch (_: java.security.NoSuchAlgorithmException) {
+                // Android API 24 does not expose PBKDF2WithHmacSHA256 in every provider.
+                // PBKDF2WithHmacSHA1 is the platform-compatible fallback for legacy devices.
+                SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
+            }
+            factory.generateSecret(spec).encoded
         } finally {
             spec.clearPassword()
         }
