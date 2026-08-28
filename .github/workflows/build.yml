@@ -12,7 +12,19 @@ jobs:
     
     strategy:
       matrix:
-        module: [app, core, features:backup, features:restore, features:transfer, features:whatsapp]
+        include:
+          - module: app
+            artifact_suffix: app
+          - module: core
+            artifact_suffix: core
+          - module: features:backup
+            artifact_suffix: features-backup
+          - module: features:restore
+            artifact_suffix: features-restore
+          - module: features:transfer
+            artifact_suffix: features-transfer
+          - module: features:whatsapp
+            artifact_suffix: features-whatsapp
     
     steps:
     - uses: actions/checkout@v4
@@ -51,7 +63,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: test-results-${{ matrix.module }}
+        name: test-results-${{ matrix.artifact_suffix }}
         path: |
           **/build/reports/tests/
           **/build/test-results/
