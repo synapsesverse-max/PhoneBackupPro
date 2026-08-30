@@ -77,4 +77,4 @@ jobs:
         ram-size: 4096M
         disk-size: 8192M
         boot-timeout: 900
-        script: adb wait-for-device && adb shell 'while [ "$(getprop sys.boot_completed)" != "1" ]; do sleep 2; done' && adb shell settings put global window_animation_scale 0.0 && adb shell settings put global transition_animation_scale 0.0 && adb shell settings put global animator_duration_scale 0.0 && chmod +x gradlew && ./gradlew :app:connectedDebugAndroidTest --no-daemon --console=plain --stacktrace
+        script: adb wait-for-device && adb shell settings put global window_animation_scale 0.0 && adb shell settings put global transition_animation_scale 0.0 && adb shell settings put global animator_duration_scale 0.0 && chmod +x gradlew && timeout 12m ./gradlew :app:connectedDebugAndroidTest --no-daemon --console=plain --stacktrace
