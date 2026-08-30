@@ -67,8 +67,13 @@ jobs:
       with:
         api-level: ${{ matrix.api-level }}
         arch: x86_64
-        target: default
+        target: google_apis
         force-avd-creation: true
-        emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect
+        emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect -no-snapshot -no-snapshot-save
         disable-animations: true
-        script: chmod +x gradlew && ./gradlew :app:connectedDebugAndroidTest --no-daemon
+        disable-spellchecker: true
+        cores: 2
+        ram-size: 2048M
+        disk-size: 4096M
+        boot-timeout: 600
+        script: adb shell settings put global window_animation_scale 0.0 && adb shell settings put global transition_animation_scale 0.0 && adb shell settings put global animator_duration_scale 0.0 && chmod +x gradlew && ./gradlew :app:connectedDebugAndroidTest --no-daemon --console=plain --stacktrace
