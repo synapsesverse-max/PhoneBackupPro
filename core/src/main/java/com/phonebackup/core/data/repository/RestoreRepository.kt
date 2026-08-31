@@ -31,7 +31,8 @@ class RestoreRepository @Inject constructor(
     }
     
     suspend fun getAvailableBackups(): List<BackupRecord> {
-        return backupRepository.getBackupsByStatus(BackupStatus.COMPLETED)
+        return (backupRepository.getBackupsByStatus(BackupStatus.COMPLETED) +
+            backupRepository.getBackupsByStatus(BackupStatus.VERIFIED)).distinctBy { it.backupUUID }
     }
     
     suspend fun markBackupAsRestoring(uuid: String) {

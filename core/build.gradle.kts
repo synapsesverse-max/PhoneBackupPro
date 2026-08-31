@@ -47,4 +47,6 @@ dependencies {
     implementation("org.apache.commons:commons-compress:1.25.0")
     
     testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
 }

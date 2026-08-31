@@ -37,8 +37,10 @@ class BackupWorker @AssistedInject constructor(
                 }
             }
             Result.success()
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
         } catch (e: Exception) {
-            Result.retry()
+            Result.failure(workDataOf("error" to (e.message ?: "Backup failed")))
         }
     }
     

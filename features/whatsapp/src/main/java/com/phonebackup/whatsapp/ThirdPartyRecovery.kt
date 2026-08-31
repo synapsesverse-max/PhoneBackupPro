@@ -1,6 +1,8 @@
 package com.phonebackup.whatsapp
 
 import android.content.Context
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteException
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -96,6 +98,32 @@ sealed class RecoveryProgress {
  */
 abstract class ThirdPartyParser(protected val backupPath: String) {
     abstract fun parse(): ThirdPartyRecovery.RecoveryResult
+
+    protected fun parseMessages(file: File): List<String> {
+        if (file.extension.lowercase() in setOf("crypt12", "crypt14", "crypt15")) return emptyList()
+        return try {
+            val db = SQLiteDatabase.openDatabase(file.absolutePath, null, SQLiteDatabase.OPEN_READONLY)
+            try {
+                val table = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name IN ('messages','message') LIMIT 1", null).use { c ->
+                    if (c.moveToFirst()) c.getString(0) else null
+                } ?: return emptyList()
+                db.rawQuery("SELECT * FROM $table", null).use { cursor ->
+                    val bodyIndex = listOf("text_data", "data", "body", "message").firstNotNullOfOrNull { name ->
+                        cursor.getColumnNames().indexOfFirst { it.equals(name, ignoreCase = true) }.takeIf { it >= 0 }
+                    } ?: return emptyList()
+                    buildList {
+                        while (cursor.moveToNext()) add(cursor.getString(bodyIndex).orEmpty())
+                    }
+                }
+            } finally {
+                db.close()
+            }
+        } catch (_: SQLiteException) {
+            emptyList()
+        } catch (_: SecurityException) {
+            emptyList()
+        }
+    }
     
     protected fun findWhatsAppFiles(): List<File> {
         val backupDir = File(backupPath)
@@ -129,7 +157,7 @@ class DrFoneParser(backupPath: String) : ThirdPartyParser(backupPath) {
                 // Try to parse database files
                 if (file.extension in listOf("db", "sqlite", "crypt12", "crypt14", "crypt15")) {
                     // Parse WhatsApp database
-                    messages.add("Recovered from: ${file.name}")
+                    messages.addAll(parseMessages(file))
                 } else if (file.extension in listOf("jpg", "jpeg", "png", "mp4", "pdf")) {
                     mediaFiles.add(file.absolutePath)
                 }
@@ -159,7 +187,7 @@ class AnyDroidParser(backupPath: String) : ThirdPartyParser(backupPath) {
         files.forEach { file ->
             try {
                 if (file.extension in listOf("db", "sqlite")) {
-                    messages.add("Recovered from: ${file.name}")
+                    messages.addAll(parseMessages(file))
                 } else if (file.extension in listOf("jpg", "jpeg", "png", "mp4", "pdf")) {
                     mediaFiles.add(file.absolutePath)
                 }
@@ -189,7 +217,7 @@ class MobileTransParser(backupPath: String) : ThirdPartyParser(backupPath) {
         files.forEach { file ->
             try {
                 if (file.extension in listOf("db", "sqlite", "bak")) {
-                    messages.add("Recovered from: ${file.name}")
+                    messages.addAll(parseMessages(file))
                 } else if (file.extension in listOf("jpg", "jpeg", "png", "mp4", "pdf")) {
                     mediaFiles.add(file.absolutePath)
                 }
@@ -219,7 +247,7 @@ class IMyFoneParser(backupPath: String) : ThirdPartyParser(backupPath) {
         files.forEach { file ->
             try {
                 if (file.extension in listOf("db", "sqlite")) {
-                    messages.add("Recovered from: ${file.name}")
+                    messages.addAll(parseMessages(file))
                 } else if (file.extension in listOf("jpg", "jpeg", "png", "mp4", "pdf")) {
                     mediaFiles.add(file.absolutePath)
                 }

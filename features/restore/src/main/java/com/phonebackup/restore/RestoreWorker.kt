@@ -38,8 +38,10 @@ class RestoreWorker @AssistedInject constructor(
                 }
             }
             Result.success()
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
         } catch (e: Exception) {
-            Result.retry()
+            Result.failure(workDataOf("error" to (e.message ?: "Restore failed")))
         }
     }
     
